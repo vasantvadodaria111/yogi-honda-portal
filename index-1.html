@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yogi Honda Gondal | Sub-Dealer Portal</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#20242a}
+header{height:64px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;padding:0 22px;gap:20px}
+.logo{font-weight:800;font-size:21px;color:#111}.logo span{color:#d71920}.title{font-size:22px;font-weight:600;color:#39434f}.dealer{margin-left:auto;font-weight:600}
+.layout{display:flex;min-height:calc(100vh - 64px)}aside{width:184px;background:#14202a;color:white;padding-top:20px}
+nav div{padding:15px 20px;font-size:15px;cursor:pointer}nav div.active,nav div:hover{background:#e71920}
+main{flex:1;padding:14px;overflow:auto}.card{background:#fff;border-radius:10px;border:1px solid #e0e3e6;margin-bottom:14px;padding:18px}
+h1{font-size:24px;margin:0 0 18px}.section{font-weight:700;background:#eaf2f9;padding:8px 10px;margin:15px 0 12px;border-radius:5px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.field label{display:block;font-size:13px;font-weight:600;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;padding:10px;border:1px solid #ccd2d8;border-radius:5px;font-size:14px}.field textarea{height:70px}
+.radio{display:flex;gap:25px;align-items:center;padding:10px 0}.radio label{font-weight:500}
+.upload{border:2px dashed #b8c1ca;border-radius:6px;padding:18px;text-align:center;background:#fbfcfd}.upload input{margin-top:8px}
+.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:15px}.btn{border:0;border-radius:5px;padding:11px 20px;cursor:pointer;font-weight:700}.reset{background:#e9edf1}.save{background:#e71920;color:#fff}
+.toolbar{display:flex;gap:10px;margin-bottom:12px}.toolbar input,.toolbar select{padding:10px;border:1px solid #ccd2d8;border-radius:5px}.toolbar input{flex:1}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 7px;border-bottom:1px solid #e3e6e9;text-align:left;white-space:nowrap}th{background:#f7f8fa}.pill{padding:5px 10px;border-radius:12px;font-weight:700;font-size:12px}.cash{background:#d9f6df;color:#16742b}.finance{background:#ffe6b5;color:#a05a00}.stock{background:#dceeff;color:#17629c}.sold{background:#d9f6df;color:#16742b}.del{color:#e71920;cursor:pointer}.edit{color:#1769aa;cursor:pointer}
+.login{position:fixed;inset:0;background:linear-gradient(135deg,#f6f7f8,#fff);display:flex;align-items:center;justify-content:center;z-index:5}.loginbox{width:390px;background:#fff;border:1px solid #ddd;border-radius:12px;padding:30px;box-shadow:0 8px 30px #0001}.loginbox h2{margin:0 0 6px}.loginbox p{color:#66717c}.loginbox input{width:100%;padding:12px;margin:7px 0;border:1px solid #ccd2d8;border-radius:6px}.loginbox button{width:100%;padding:12px;margin-top:12px;background:#e71920;color:#fff;border:0;border-radius:6px;font-weight:700}
+@media(max-width:900px){aside{width:65px}nav div{font-size:0;text-align:center}.grid{grid-template-columns:repeat(2,1fr)}.dealer{display:none}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.title{font-size:16px}}
+@media print{aside,header,.actions,.toolbar{display:none!important}main{padding:0}.card{border:0;box-shadow:none}}
+</style>
+</head>
+<body>
+<div id="login" class="login">
+ <div class="loginbox">
+  <div class="logo">HONDA <span>YOGI HONDA GONDAL</span></div>
+  <h2>Sub-Dealer Portal</h2><p>Login to your account</p>
+  <input id="uid" placeholder="User ID" value="demo">
+  <input id="pwd" type="password" placeholder="Password" value="1234">
+  <button onclick="login()">LOGIN</button>
+  <p style="font-size:12px">Demo login: <b>demo / 1234</b></p>
+ </div>
+</div>
+
+<header><div class="logo">HONDA | <span>YOGI HONDA GONDAL</span></div><div class="title">Sub-Dealer Portal</div><div class="dealer">Shree Sai Motors ▾</div></header>
+<div class="layout">
+<aside><nav>
+<div class="active navbtn" data-target="dashboard" onclick="showModule('dashboard',this)">🏠 Dashboard</div>
+<div class="navbtn" data-target="add" onclick="showModule('add',this)">🏍 Add Vehicle</div>
+<div class="navbtn" data-target="list" onclick="showModule('list',this)">🚗 Vehicle List</div>
+<div class="navbtn" data-target="sales" onclick="showModule('sales',this)">🧾 Sales / Sold</div>
+<div class="navbtn" data-target="payments" onclick="showModule('payments',this)">💳 Payments</div>
+<div class="navbtn" data-target="ledger" onclick="showModule('ledger',this)">📒 Hisab / Ledger</div>
+<div class="navbtn" data-target="statements" onclick="showModule('statements',this)">📄 Statements</div>
+<div class="navbtn" data-target="profile" onclick="showModule('profile',this)">👤 Profile</div>
+</nav></aside>
+<main>
+<div id="dashboard" class="card module">
+<h1>🏠 Dashboard</h1><div class="grid"><div class="card"><b>Total Vehicles</b><h2 id="dashTotal">0</h2></div><div class="card"><b>Vehicles With Me</b><h2 id="dashStock">0</h2></div><div class="card"><b>Vehicles Sold</b><h2 id="dashSold">0</h2></div><div class="card"><b>Outstanding</b><h2 id="dashOutstanding">₹ 0</h2></div></div><div class="section">Recent Vehicles</div><table><thead><tr><th>Date</th><th>Model</th><th>Chassis</th><th>Amount</th><th>Status</th></tr></thead><tbody id="dashboardRows"></tbody></table></div>
+
+<div id="add" class="card module" style="display:none"><h1>➕ Add New Vehicle</h1><div class="section">Vehicle Details</div>
+<div class="grid">
+<div class="field"><label>Vehicle Type *</label><select id="type"><option>Scooter</option><option>Motorcycle</option></select></div>
+<div class="field"><label>Model *</label><input id="model" placeholder="e.g. Activa 6G"></div>
+<div class="field"><label>Variant *</label><input id="variant" placeholder="e.g. DLX"></div>
+<div class="field"><label>Colour *</label><input id="colour" placeholder="e.g. Pearl White"></div>
+<div class="field"><label>Chassis Number *</label><input id="chassis"></div>
+<div class="field"><label>Engine Number *</label><input id="engine"></div>
+<div class="field"><label>Key Number</label><input id="key"></div>
+<div class="field"><label>Invoice Number</label><input id="invoice"></div>
+<div class="field"><label>Sale Type *</label><div class="radio"><label><input type="radio" name="sale" value="Cash" checked> Cash</label><label><input type="radio" name="sale" value="Finance"> Finance</label></div></div>
+<div class="field"><label>Finance Company</label><input id="finance" placeholder="Only if Finance"></div>
+<div class="field"><label>Finance Account / Loan No.</label><input id="loan"></div>
+<div class="field"><label>Date Received *</label><input id="date" type="date"></div>
+</div>
+<div class="section">Documents</div>
+<div class="grid">
+<div class="upload"><b>Upload Chassis Print *</b><br><input id="chassisFile" type="file" accept=".jpg,.jpeg,.png,.pdf"></div>
+<div class="upload"><b>Upload Customer Aadhaar Card *</b><br><input id="aadhaarFile" type="file" accept=".jpg,.jpeg,.png,.pdf"></div>
+<div class="upload"><b>Additional Documents</b><br><input id="otherFile" type="file" multiple></div>
+<div class="field"><label>Remarks</label><textarea id="remarks" placeholder="Enter remarks"></textarea></div>
+</div>
+<div class="grid">
+<div class="field"><label>Vehicle Price (₹) *</label><input id="price" type="number" value="0"></div>
+<div class="field"><label>Other Charges (₹)</label><input id="charges" type="number" value="0"></div>
+<div class="field"><label>Total Amount (₹)</label><input id="total" readonly></div>
+</div>
+<div class="actions"><button class="btn reset" onclick="resetForm()">Reset</button><button class="btn save" onclick="saveVehicle()">Save Vehicle</button></div>
+</div>
+
+<div id="list" class="card">
+<h1>🏍 Vehicle List</h1>
+<div class="toolbar"><input id="search" oninput="render()" placeholder="Search by Chassis / Engine / Model..."><select id="filter" onchange="render()"><option>All Status</option><option>Stock With Me</option><option>Sold</option></select><button class="btn save" onclick="show('add')">＋ Add Vehicle</button></div>
+<table><thead><tr><th>Date</th><th>Vehicle</th><th>Model</th><th>Variant</th><th>Colour</th><th>Chassis</th><th>Engine</th><th>Sale</th><th>Finance</th><th>Invoice</th><th>Amount</th><th>Documents</th><th>Status</th><th>Action</th></tr></thead><tbody id="rows"></tbody></table>
+</div>
+
+<div id="sales" class="card module" style="display:none">
+<h1>🧾 Sales / Sold Vehicles</h1>
+<div class="toolbar"><input id="salesSearch" oninput="renderSales()" placeholder="Search sold vehicle..."><button class="btn save" onclick="showModule('list')">Vehicle List</button></div>
+<table><thead><tr><th>Date</th><th>Model</th><th>Chassis</th><th>Customer</th><th>Sale Amount</th><th>Payment</th><th>Status</th></tr></thead><tbody id="salesRows"></tbody></table>
+</div>
+
+<div id="payments" class="card module" style="display:none">
+<h1>💳 Payments</h1>
+<div class="section">Record Payment</div>
+<div class="grid">
+<div class="field"><label>Date *</label><input id="payDate" type="date"></div>
+<div class="field"><label>Amount (₹) *</label><input id="payAmount" type="number"></div>
+<div class="field"><label>Payment Mode</label><select id="payMode"><option>Bank Transfer</option><option>Cash</option><option>Cheque</option><option>UPI</option></select></div>
+<div class="field"><label>Reference / UTR</label><input id="payRef"></div>
+<div class="field"><label>Remarks</label><input id="payRemarks"></div>
+</div>
+<div class="actions"><button class="btn save" onclick="recordPayment()">Save Payment</button></div>
+<div class="section">Payment History</div>
+<table><thead><tr><th>Date</th><th>Amount</th><th>Mode</th><th>Reference</th><th>Remarks</th></tr></thead><tbody id="paymentRows"></tbody></table>
+</div>
+
+<div id="ledger" class="card module" style="display:none">
+<h1>📒 Hisab / Ledger</h1>
+<div class="grid">
+<div class="card"><b>Opening Balance</b><h2>₹ <span id="opening">0</span></h2></div>
+<div class="card"><b>Total Vehicle Debit</b><h2>₹ <span id="ledgerDebit">0</span></h2></div>
+<div class="card"><b>Total Payments</b><h2>₹ <span id="ledgerCredit">0</span></h2></div>
+<div class="card"><b>Closing Outstanding</b><h2>₹ <span id="closing">0</span></h2></div>
+</div>
+<table><thead><tr><th>Date</th><th>Particular</th><th>Vehicle / Ref</th><th>Debit ₹</th><th>Credit ₹</th><th>Balance ₹</th><th>Mode</th></tr></thead><tbody id="ledgerRows"></tbody></table>
+</div>
+
+<div id="statements" class="card module" style="display:none">
+<h1>📄 Statements</h1>
+<div class="toolbar">
+<select id="statementMonth"><option value="all">All Dates</option></select>
+<button class="btn save" onclick="printStatement()">🖨 Print Statement</button>
+</div>
+<div class="section">Account Summary</div>
+<table><tbody>
+<tr><th>Vehicles Supplied</th><td id="stmtVehicles">0</td></tr>
+<tr><th>Total Vehicle Value</th><td id="stmtValue">₹ 0</td></tr>
+<tr><th>Total Payments</th><td id="stmtPayments">₹ 0</td></tr>
+<tr><th>Closing Outstanding</th><td id="stmtOutstanding">₹ 0</td></tr>
+</tbody></table>
+</div>
+
+<div id="profile" class="card module" style="display:none">
+<h1>👤 Sub-Dealer Profile</h1>
+<div class="grid">
+<div class="field"><label>Sub-Dealer Name</label><input value="Shree Sai Motors"></div>
+<div class="field"><label>User ID</label><input value="demo" readonly></div>
+<div class="field"><label>Mobile Number</label><input placeholder="Enter mobile"></div>
+<div class="field"><label>GSTIN</label><input placeholder="Enter GSTIN"></div>
+<div class="field"><label>Address</label><input placeholder="Enter address"></div>
+</div>
+<div class="actions"><button class="btn save" onclick="alert('Profile saved')">Save Profile</button></div>
+</div>
+</main></div>
+<script>
+let vehicles=JSON.parse(localStorage.getItem('yogiVehicles')||'[]');
+document.getElementById('date').valueAsDate=new Date();
+document.getElementById('price').oninput=calc;document.getElementById('charges').oninput=calc;calc();
+function calc(){document.getElementById('total').value=(+document.getElementById('price').value||0)+(+document.getElementById('charges').value||0)}
+function login(){document.getElementById('login').style.display='none'}
+function show(id){showModule(id)}
+function showModule(id,el){
+ document.querySelectorAll('.module').forEach(x=>x.style.display='none');
+ const target=document.getElementById(id); if(target) target.style.display='block';
+ document.querySelectorAll('.navbtn').forEach(x=>x.classList.remove('active'));
+ if(el) el.classList.add('active');
+ else {const n=document.querySelector('.navbtn[data-target="'+id+'"]'); if(n)n.classList.add('active')}
+ if(id==='list')render();
+ if(id==='dashboard')renderDashboard();
+ if(id==='sales')renderSales();
+ if(id==='payments')renderPayments();
+ if(id==='ledger')renderLedger();
+ if(id==='statements')renderStatement();
+}
+function saveVehicle(){
+ let sale=document.querySelector('input[name=sale]:checked').value;
+ let v={date:date.value,type:type.value,model:model.value,variant:variant.value,colour:colour.value,chassis:chassis.value,engine:engine.value,key:key.value,invoice:invoice.value,sale,finance:finance.value,loan:loan.value,price:+price.value||0,charges:+charges.value||0,total:+total.value||0,remarks:remarks.value,chassisDoc:chassisFile.files[0]?.name||'',aadhaar: aadhaarFile.files[0]?.name||'',status:'Stock With Me'};
+ if(!v.model||!v.chassis||!v.engine||!v.date||!v.chassisDoc||!v.aadhaar){alert('Please fill required fields and upload Chassis Print + Aadhaar Card.');return}
+ vehicles.unshift(v);localStorage.setItem('yogiVehicles',JSON.stringify(vehicles));alert('Vehicle saved successfully.');resetForm();render();showModule('list')
+}
+function resetForm(){['model','variant','colour','chassis','engine','key','invoice','finance','loan','remarks'].forEach(x=>document.getElementById(x).value='');price.value=0;charges.value=0;calc();chassisFile.value='';aadhaarFile.value='';otherFile.value=''}
+function render(){let q=(search.value||'').toLowerCase(),f=filter.value;rows.innerHTML=vehicles.filter(v=>(!q||[v.model,v.chassis,v.engine].join(' ').toLowerCase().includes(q))&&(f==='All Status'||v.status===f)).map((v,i)=>`<tr><td>${v.date}</td><td>${v.type}</td><td>${v.model}</td><td>${v.variant}</td><td>${v.colour}</td><td>${v.chassis}</td><td>${v.engine}</td><td><span class="pill ${v.sale==='Cash'?'cash':'finance'}">${v.sale}</span></td><td>${v.finance||'-'}</td><td>${v.invoice}</td><td>₹ ${v.total.toLocaleString('en-IN')}</td><td>📄 📷</td><td><span class="pill stock">${v.status}</span></td><td><span class="edit" onclick="alert('Edit module can be connected to database')">✎</span> <span class="del" onclick="del(${i})">🗑</span></td></tr>`).join('')}
+function del(i){if(confirm('Delete this vehicle?')){vehicles.splice(i,1);localStorage.setItem('yogiVehicles',JSON.stringify(vehicles));render()}}
+
+let payments=JSON.parse(localStorage.getItem('yogiPayments')||'[]');
+
+function money(n){return '₹ '+Number(n||0).toLocaleString('en-IN')}
+function renderDashboard(){
+ const total=vehicles.length, stock=vehicles.filter(v=>v.status==='Stock With Me').length, sold=vehicles.filter(v=>v.status==='Sold').length;
+ const debit=vehicles.reduce((s,v)=>s+v.total,0), credit=payments.reduce((s,p)=>s+p.amount,0);
+ dashTotal.textContent=total;dashStock.textContent=stock;dashSold.textContent=sold;dashOutstanding.textContent=money(debit-credit); dashboardRows.innerHTML=vehicles.slice(0,10).map(v=>`<tr><td>${v.date}</td><td>${v.model}</td><td>${v.chassis}</td><td>${money(v.total)}</td><td>${v.status}</td></tr>`).join('');
+}
+function recordPayment(){
+ const amount=+payAmount.value||0;if(!amount){alert('Enter payment amount');return}
+ payments.unshift({date:payDate.value||new Date().toISOString().slice(0,10),amount,mode:payMode.value,ref:payRef.value,remarks:payRemarks.value});
+ localStorage.setItem('yogiPayments',JSON.stringify(payments));payAmount.value='';payRef.value='';payRemarks.value='';renderPayments();renderLedger();renderDashboard();alert('Payment recorded successfully');
+}
+function renderPayments(){
+ paymentRows.innerHTML=payments.map(p=>`<tr><td>${p.date}</td><td>${money(p.amount)}</td><td>${p.mode}</td><td>${p.ref||'-'}</td><td>${p.remarks||'-'}</td></tr>`).join('');
+}
+function renderLedger(){
+ let debit=vehicles.reduce((s,v)=>s+v.total,0),credit=payments.reduce((s,p)=>s+p.amount,0),balance=debit;
+ let arr=[];
+ vehicles.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(v=>{balance+=0;arr.push({date:v.date,part:'Vehicle Supplied',ref:v.chassis,debit:v.total,credit:0,mode:'-'})});
+ payments.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(p=>arr.push({date:p.date,part:'Payment Received',ref:p.ref||'-',debit:0,credit:p.amount,mode:p.mode}));
+ arr.sort((a,b)=>a.date.localeCompare(b.date)); balance=0;
+ ledgerRows.innerHTML=arr.map(x=>{balance+=x.debit-x.credit;return `<tr><td>${x.date}</td><td>${x.part}</td><td>${x.ref}</td><td>${money(x.debit)}</td><td>${money(x.credit)}</td><td>${money(balance)}</td><td>${x.mode}</td></tr>`}).join('');
+ ledgerDebit.textContent=debit.toLocaleString('en-IN');ledgerCredit.textContent=credit.toLocaleString('en-IN');closing.textContent=(debit-credit).toLocaleString('en-IN');
+}
+function renderSales(){
+ const q=(salesSearch?.value||'').toLowerCase();
+ const sold=vehicles.filter(v=>v.status==='Sold' && (!q||[v.model,v.chassis].join(' ').toLowerCase().includes(q)));
+ salesRows.innerHTML=sold.map(v=>`<tr><td>${v.date}</td><td>${v.model}</td><td>${v.chassis}</td><td>-</td><td>${money(v.total)}</td><td>${v.sale}</td><td><span class="pill sold">Sold</span></td></tr>`).join('');
+}
+function renderStatement(){
+ const debit=vehicles.reduce((s,v)=>s+v.total,0),credit=payments.reduce((s,p)=>s+p.amount,0);
+ stmtVehicles.textContent=vehicles.length;stmtValue.textContent=money(debit);stmtPayments.textContent=money(credit);stmtOutstanding.textContent=money(debit-credit);
+}
+function printStatement(){
+ renderStatement();window.print();
+}
+payDate.valueAsDate=new Date();
+render();renderDashboard();renderPayments();renderLedger();renderStatement();
+</script>
+</body></html>
